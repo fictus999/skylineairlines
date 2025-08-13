@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkyLine Airlines Management System</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ SkyLine Airlines Management System</h1>
+            <p>Complete Airline Operations Management Platform</p>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard', event)">Dashboard</button>
+            <button class="nav-tab" onclick="showSection('flights', event)">Flight Management</button>
+            <button class="nav-tab" onclick="showSection('bookings', event)">Reservations</button>
+            <button class="nav-tab" onclick="showSection('passengers', event)">Passengers</button>
+            <button class="nav-tab" onclick="showSection('aircraft', event)">Aircraft</button>
+            <button class="nav-tab" onclick="showSection('search', event)">Search Flights</button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalFlights">0</h3>
+                    <p>Total Flights</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalBookings">0</h3>
+                    <p>Active Bookings</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalPassengers">0</h3>
+                    <p>Total Passengers</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalAircraft">0</h3>
+                    <p>Fleet Size</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Recent Flight Activity</h2>
+                <div id="recentFlights"></div>
+            </div>
+        </div>
+
+        <!-- Flight Management Section -->
+        <div id="flights" class="content-section">
+            <div class="card">
+                <h2>Add New Flight</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Flight Number</label>
+                        <input type="text" id="flightNumber" placeholder="e.g., SL001" />
+                    </div>
+                    <div class="form-group">
+                        <label>Aircraft</label>
+                        <select id="flightAircraft">
+                            <option value="">Select Aircraft</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Origin</label>
+                        <input type="text" id="flightOrigin" placeholder="e.g., New York" />
+                    </div>
+                    <div class="form-group">
+                        <label>Destination</label>
+                        <input type="text" id="flightDestination" placeholder="e.g., Los Angeles" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departure Date</label>
+                        <input type="date" id="flightDepartureDate" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departure Time</label>
+                        <input type="time" id="flightDepartureTime" />
+                    </div>
+                    <div class="form-group">
+                        <label>Arrival Date</label>
+                        <input type="date" id="flightArrivalDate" />
+                    </div>
+                    <div class="form-group">
+                        <label>Arrival Time</label>
+                        <input type="time" id="flightArrivalTime" />
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" id="flightPrice" placeholder="299.99" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="flightStatus">
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Delayed">Delayed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="addFlight()">Add Flight</button>
+                <button class="btn btn-secondary" onclick="clearFlightForm()">Clear Form</button>
+            </div>
+
+            <div class="card">
+                <h2>Flight List</h2>
+                <div id="flightsList"></div>
+            </div>
+        </div>
+
+        <!-- Bookings Section -->
+        <div id="bookings" class="content-section">
+            <div class="card">
+                <h2>New Booking</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Flight</label>
+                        <select id="bookingFlight">
+                            <option value="">Select Flight</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Passenger Name</label>
+                        <input type="text" id="bookingPassengerName" placeholder="John Doe" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="bookingEmail" placeholder="john@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="bookingPhone" placeholder="+1-555-0123" />
+                    </div>
+                    <div class="form-group">
+                        <label>Seat Preference</label>
+                        <select id="bookingSeat">
+                            <option value="Economy">Economy</option>
+                            <option value="Business">Business</option>
+                            <option value="First">First Class</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Special Requests</label>
+                        <textarea id="bookingRequests" rows="3" placeholder="Dietary restrictions, wheelchair assistance, etc."></textarea>
+                    </div>
+                </div>
+                <button class="btn" onclick="addBooking()">Create Booking</button>
+                <button class="btn btn-secondary" onclick="clearBookingForm()">Clear Form</button>
+            </div>
+            <div class="card">
+                <h2>Booking Management</h2>
+                <table class="data-table" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Flight</th>
+                            <th>Passenger</th>
+                            <th>Email</th>
+                            <th>Seat Class</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Passengers Section -->
+        <div id="passengers" class="content-section">
+            <div class="card">
+                <h2>Register New Passenger</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" id="passengerFirstName" placeholder="John" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" id="passengerLastName" placeholder="Doe" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="passengerEmail" placeholder="john@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="passengerPhone" placeholder="+1-555-0123" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="passengerDOB" />
+                    </div>
+                    <div class="form-group">
+                        <label>Passport Number</label>
+                        <input type="text" id="passengerPassport" placeholder="A12345678" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nationality</label>
+                        <input type="text" id="passengerNationality" placeholder="American" />
+                    </div>
+                    <div class="form-group">
+                        <label>Frequent Flyer Number</label>
+                        <input type="text" id="passengerFFN" placeholder="FF123456789" />
+                    </div>
+                </div>
+                <button class="btn" onclick="addPassenger()">Register Passenger</button>
+                <button class="btn btn-secondary" onclick="clearPassengerForm()">Clear Form</button>
+            </div>
+
+            <div class="card">
+                <h2>Passenger Directory</h2>
+                <table class="data-table" id="passengersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Nationality</th>
+                            <th>FF Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="passengersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Aircraft Section -->
+        <div id="aircraft" class="content-section">
+            <div class="card">
+                <h2>Add New Aircraft</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Registration Number</label>
+                        <input type="text" id="aircraftReg" placeholder="N12345" />
+                    </div>
+                    <div class="form-group">
+                        <label>Model</label>
+                        <input type="text" id="aircraftModel" placeholder="Boeing 737-800" />
+                    </div>
+                    <div class="form-group">
+                        <label>Manufacturer</label>
+                        <input type="text" id="aircraftManufacturer" placeholder="Boeing" />
+                    </div>
+                    <div class="form-group">
+                        <label>Capacity</label>
+                        <input type="number" id="aircraftCapacity" placeholder="180" />
+                    </div>
+                    <div class="form-group">
+                        <label>Year Manufactured</label>
+                        <input type="number" id="aircraftYear" placeholder="2020" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="aircraftStatus">
+                            <option value="Active">Active</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Retired">Retired</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="addAircraft()">Add Aircraft</button>
+                <button class="btn btn-secondary" onclick="clearAircraftForm()">Clear Form</button>
+            </div>
+
+            <div class="card">
+                <h2>Fleet Management</h2>
+                <table class="data-table" id="aircraftTable">
+                    <thead>
+                        <tr>
+                            <th>Registration</th>
+                            <th>Model</th>
+                            <th>Manufacturer</th>
+                            <th>Capacity</th>
+                            <th>Year</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="aircraftTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div id="search" class="content-section">
+            <div class="card">
+                <h2>Flight Search</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchOrigin" placeholder="From City" />
+                    <input type="text" id="searchDestination" placeholder="To City" />
+                    <input type="date" id="searchDate" />
+                    <button class="btn" onclick="searchFlights()">Search Flights</button>
+                </div>
+            </div>
+
+            <div id="searchResults" class="card" style="display: none;">
+                <h2>Search Results</h2>
+                <div id="searchResultsList"></div>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
